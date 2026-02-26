@@ -12,18 +12,7 @@ const allowedOrigins = [
   "http://localhost:5000"
 ]
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error("Not allowed by CORS"))
-    }
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"]
-}))
-
+app.use(cors())
 app.options("*", cors())
 
 app.use(express.json())
