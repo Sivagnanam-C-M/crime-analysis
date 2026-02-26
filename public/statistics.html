@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistics | Crime Analysis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Crime Analysis & Awareness</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="statistics.html" class="active">Statistics</a>
+    <a href="awareness.html">Awareness</a>
+    <a href="report.html">Report Crime</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="section">
+  <h2>📊 Crime Statistics Overview</h2>
+  <p>Get a clear understanding of crime trends in your city or state.</p>
+
+  <div class="stats">
+    <div class="stat-box">
+      <h3 id="totalCrimes">0</h3>
+      <p>Total Crimes Reported</p>
+    </div>
+
+    <div class="stat-box">
+      <h3 id="cyberCrimes">0</h3>
+      <p>Cyber Crimes</p>
+    </div>
+
+    <div class="stat-box">
+      <h3 id="fraudCrimes">0</h3>
+      <p>Fraud & Scams</p>
+    </div>
+
+    <div class="stat-box">
+      <h3 id="otherCrimes">0</h3>
+      <p>Other Crimes</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Crime Analysis & Awareness</p>
+</footer>
+
+<script>
+async function loadStatistics() {
+  try {
+    const response = await fetch("http://localhost:5000/statistics");
+    const data = await response.json();
+
+    document.getElementById("totalCrimes").innerText = data.total;
+    document.getElementById("cyberCrimes").innerText = data.cyber;
+
+    // Optional extra calculations
+    const fraud = data.total - data.cyber;
+    document.getElementById("fraudCrimes").innerText = fraud > 0 ? fraud : 0;
+
+    document.getElementById("otherCrimes").innerText = data.total;
+  } catch (error) {
+    console.error("Error loading statistics:", error);
+  }
+}
+
+loadStatistics();
+</script>
+
+</body>
+</html>

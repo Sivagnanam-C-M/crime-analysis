@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Crime | Crime Awareness</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Crime Analysis & Awareness</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="statistics.html">Statistics</a>
+    <a href="awareness.html">Awareness</a>
+    <a href="report.html" class="active">Report Crime</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="section">
+  <h2>🚨 Report a Crime</h2>
+  <p>Submit a confidential report below. Your identity will remain protected.</p>
+
+  <form class="report-form" id="reportForm">
+    <label>Type of Crime:</label><br>
+    <input type="text" id="type" required><br><br>
+
+    <label>Location:</label><br>
+    <input type="text" id="location" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea id="description" rows="5" required></textarea><br><br>
+
+    <button class="btn" type="submit">Submit Report</button>
+  </form>
+</section>
+
+<footer>
+  <p>© 2025 Crime Analysis & Awareness</p>
+</footer>
+
+<script>
+document.getElementById("reportForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const type = document.getElementById("type").value;
+  const location = document.getElementById("location").value;
+  const description = document.getElementById("description").value;
+
+  try {
+    const response = await fetch("http://localhost:5000/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ type, location, description })
+    });
+
+    const data = await response.json();
+    alert(data.message);
+
+    document.getElementById("reportForm").reset();
+
+  } catch (error) {
+    alert("Error submitting report");
+    console.error(error);
+  }
+});
+</script>
+
+</body>
+</html>
