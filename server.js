@@ -2,31 +2,42 @@ const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
 require("dotenv").config()
-console.log("Loaded URI:", process.env.MONGO_URI)
 const path = require("path")
 
-console.log("Starting server...")
-
 const app = express()
+const PORT = process.env.PORT || 5000
+
+const allowedOrigins = [
+  "https://crime-analycis.netlify.app",
+  "http://localhost:5000"
+]
 
 app.use(cors({
-  origin: "https://crime-analycis.netlify.app"
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"]
 }))
+
+app.options("*", cors())
+
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "public")))
-
-const PORT = process.env.PORT || 5000
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB Connected Successfully")
   })
   .catch((err) => {
-    console.error("MongoDB Connection Error:")
     console.error(err.message)
     process.exit(1)
   })
-  
+
 const CrimeSchema = new mongoose.Schema({
   type: { type: String, required: true },
   location: { type: String, required: true },
@@ -49,7 +60,6 @@ app.post("/report", async (req, res) => {
 
     res.status(201).json({ message: "Report submitted successfully" })
   } catch (error) {
-    console.error(error)
     res.status(500).json({ message: "Server error" })
   }
 })
@@ -58,14 +68,12 @@ app.get("/statistics", async (req, res) => {
   try {
     const total = await Crime.countDocuments()
     const cyber = await Crime.countDocuments({ type: "Cybercrime" })
-
     res.json({ total, cyber })
   } catch (error) {
-    console.error(error)
     res.status(500).json({ message: "Server error" })
   }
 })
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
