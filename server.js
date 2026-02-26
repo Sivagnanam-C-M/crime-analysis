@@ -8,7 +8,7 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 const allowedOrigins = [
-  "https://crime-analycis.netlify.app",
+  "https://crime-analyse.netlify.app",
   "http://localhost:5000"
 ]
 
