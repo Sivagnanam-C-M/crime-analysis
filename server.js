@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 require("dotenv").config()
 const path = require("path")
+console.log("MONGO_URI exists:", !!process.env.MONGO_URI)
 
 const app = express()
 
